@@ -1,10 +1,3 @@
-/*
-This is my first ended library based on the original code of 
-Website: http://www.brokking.net/imu.html
-Youtube: https://youtu.be/4BoIE8YQwM8
-Version: 1.0 (May 5, 2016)
-// Please support suscribing to his channel 
-*/
 
 #if (ARDUINO >= 100)
 #include <Arduino.h>
