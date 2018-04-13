@@ -17,40 +17,40 @@ MPU::MPU(){
 void MPU::begin(){
 
  //Activate the MPU-6050
- Wire.beginTransmission(0x68);                                        //Start communicating with the MPU-6050
- Wire.write(0x6B);                                                    //Send the requested starting register
- Wire.write(0x00);                                                    //Set the requested starting register
- Wire.endTransmission();                                              //End the transmission
+ Wire.beginTransmission(0x68);                                        
+ Wire.write(0x6B);                                                    
+ Wire.write(0x00);                                                    
+ Wire.endTransmission();                                              
  //Configure the accelerometer (+/-8g)
- Wire.beginTransmission(0x68);                                        //Start communicating with the MPU-6050
- Wire.write(0x1C);                                                    //Send the requested starting register
- Wire.write(0x10);                                                    //Set the requested starting register
- Wire.endTransmission();                                              //End the transmission
+ Wire.beginTransmission(0x68);                                        
+ Wire.write(0x1C);                                                    
+ Wire.write(0x10);                                                    
+ Wire.endTransmission();                                              
  //Configure the gyro (500dps full scale)
- Wire.beginTransmission(0x68);                                        //Start communicating with the MPU-6050
- Wire.write(0x1B);                                                    //Send the requested starting register
- Wire.write(0x08);                                                    //Set the requested starting register
- Wire.endTransmission();                                              //End the transmission
+ Wire.beginTransmission(0x68);                                        
+ Wire.write(0x1B);                                                    
+ Wire.write(0x08);                                                    
+ Wire.endTransmission();                                              
 
 }
  
 void MPU::read(){    
 
-int x=0,y=1,z=2;
-int R=0,P=1,Y=2;
+const int x=0,y=1,z=2;
+const int R=0,P=1,Y=2;
    
-Wire.beginTransmission(0x68);                                          //Start communicating with the MPU-6050
-Wire.write(0x3B);                                                      //Send the requested starting register
-Wire.endTransmission();                                                //End the transmission
-Wire.requestFrom(0x68,14);                                             //Request 14 bytes from the MPU-6050
-while(Wire.available() < 14);                                          //Wait until all the bytes are received
-acc.value[x] = Wire.read()<<8|Wire.read();                             //Add the low and high byte to the acc_x variable
-acc.value[y] = Wire.read()<<8|Wire.read();                             //Add the low and high byte to the acc_y variable
-acc.value[z] = Wire.read()<<8|Wire.read();                             //Add the low and high byte to the acc_z variable
-temp = Wire.read()<<8|Wire.read();                                     //Add the low and high byte to the temperature variable
-gyro.spin[x] = Wire.read()<<8|Wire.read();                             //Add the low and high byte to the gyro_x variable
-gyro.spin[y] = Wire.read()<<8|Wire.read();                             //Add the low and high byte to the gyro_y variable
-gyro.spin[z] = Wire.read()<<8|Wire.read();                             //Add the low and high byte to the gyro_z variable
+Wire.beginTransmission(0x68);                                         
+Wire.write(0x3B);                                                     
+Wire.endTransmission();                                                
+Wire.requestFrom(0x68,14);                                             
+while(Wire.available() < 14);                                          
+acc.value[x] = Wire.read()<<8|Wire.read();                             
+acc.value[y] = Wire.read()<<8|Wire.read();
+acc.value[z] = Wire.read()<<8|Wire.read();
+temp = Wire.read()<<8|Wire.read();
+gyro.spin[x] = Wire.read()<<8|Wire.read();
+gyro.spin[y] = Wire.read()<<8|Wire.read();
+gyro.spin[z] = Wire.read()<<8|Wire.read();
 Wire.endTransmission();
 
 gyro.spin[x] -= gyro.cal[x];                                              
@@ -64,7 +64,7 @@ gyro.angle[R] += gyro.spin[y] * 0.0000611;                                      
 gyro.angle[P] += gyro.angle[R] * sin(gyro.spin[z] * 0.000001066);                  //If the IMU has yawed transfer the roll angle to the pitch angel
 gyro.angle[R] -= gyro.angle[P] * sin(gyro.spin[z] * 0.000001066);                  //If the IMU has yawed transfer the pitch angle to the roll angel  
  //Accelerometer angle calculations
-acc.vector = sqrt((acc.value[x]*acc.value[x])+(acc.value[y]*acc.value[y])+(acc.value[z]*acc.value[z]));           //Calculate the total accelerometer vector
+acc.vector = sqrt((acc.value[x]*acc.value[x])+(acc.value[y]*acc.value[y])+(acc.value[z]*acc.value[z]));   //Calculate the total accelerometer vector
  //57.296 = 1 / (3.142 / 180) The Arduino asin function is in radians
 acc.angle[P] = asin((double)acc.value[P]/acc.vector)*  57.296;                     //Calculate the pitch angle
 acc.angle[R] = asin((double)acc.value[R]/acc.vector)* -57.296;                     //Calculate the roll angle
